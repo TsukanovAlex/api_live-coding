@@ -1,4 +1,4 @@
-import { deleteTodo, getTodo, postTodo } from "./api.js";
+import { deleteTodo, getTodo,  postTodo } from "./api.js";
 import { renderLoginComponent } from "./components/login-component.js";
 
 let tasks = [];
@@ -47,7 +47,7 @@ let tasks = [];
     //     })
     renderLoginComponent({
         appEl, setToken: (newToken) => {
-        token = newToken;
+        token = newToken
     },
     fetchTodosAndRender,
 })

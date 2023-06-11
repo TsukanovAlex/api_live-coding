@@ -1,27 +1,53 @@
 import { loginUser } from "../api.js";
 
+
+
+
+// Ренер-функция формы входа и регистрации
 export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
-    const appHtml = `<h1>Список задач</h1>
+
+    // Флаг переключения формы входа на форму реистриции
+    let isLoginMode = false;
+
+    const renderForm = () => {
+
+        const appHtml =
+            `<h1>Список задач</h1>
     <div class="form">
-      <h3 class="form-title">Форма входа</h3>
+      <h3 class="form-title">Форма ${isLoginMode ? 'входа' : 'регистрации'}</h3>
       <div class="form-row">
-        Логин
+
+      ${isLoginMode ?
+                '' :
+                `Имя
+      <input
+        type="text" id="name-input" class="input"/> 
+        <br><br> `}
+
+      Логин
         <input
           type="text" id="login-input" class="input"/>
-      </div>
-      <br>
+      <br><br>
+
       Пароль
         <input
           type="password" id="password-input" class="input"/>
-          <br>
-          <button class="button" id="login-button">Вход</button>
+          <br><br>
+
+          </div>
+          <button class="button" id="login-button">${isLoginMode ? 'Войти' : 'Зарегистрироваться'}</button>
+          <br><br>
+          <br><br>
+
+          <button class="button" id="toggle-button">Перейти ${isLoginMode ? 'к регистрации' : 'ко входу'}</button>
+          
       </div>
    `;
-    appEl.innerHTML = appHtml;
+        appEl.innerHTML = appHtml;
 
-    document
-        .getElementById('login-button')
-        .addEventListener('click', () => {
+
+        // Обработчик клика кнопки "Вход"
+        document.getElementById('login-button').addEventListener('click', () => {
             const login = document.getElementById('login-input').value;
             const password = document.getElementById('password-input').value;
             if (!login) {
@@ -37,13 +63,20 @@ export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
                 password: password,
             })
                 .then((user) => {
-                    console.log('user');
                     setToken(`Bearer ${user.user.token}`);
                     fetchTodosAndRender();
                 })
                 .catch((error) => {
                     // TODO: Выводить алерт красиво
                     alert(error.message);
-                  });
+                });
         });
+
+        // Обработчик клика кнопки "Перейти к регистрации"
+        document.getElementById("toggle-button").addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            renderForm();
+        })
+    }
+renderForm();
 }
